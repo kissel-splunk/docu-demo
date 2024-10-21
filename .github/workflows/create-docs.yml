@@ -1,0 +1,36 @@
+name: Create docs
+
+on: 
+  workflow_dispatch
+
+jobs:
+  convert-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Git
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Create documentation
+        run: |
+          python create_docs.py
+      
+      # Step 4: Commit and Push the new .txt files
+      - name: Push docs
+        run: |
+          if [[ `git status --porcelain` ]]; then
+            git add '*.md'
+            git commit -m "Automated docs update"
+            git push
+          else
+            echo "No changes to commit."
