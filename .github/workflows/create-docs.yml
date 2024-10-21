@@ -28,9 +28,6 @@ jobs:
       # Step 4: Commit and Push the new .txt files
       - name: Push docs
         run: |
-          if [[ `git status --porcelain` ]]; then
-            git add '*.md'
-            git commit -m "Automated docs update"
-            git push
-          else
-            echo "No changes to commit."
+          git add '*.md'
+          git commit -m "Automated docs update"
+          git push
